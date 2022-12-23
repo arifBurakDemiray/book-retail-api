@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.TimeZone;
 
 @EnableSwagger2
@@ -20,7 +19,7 @@ public class ReadingIsGoodApplication {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         new SpringApplicationBuilder()
                 .sources(ReadingIsGoodApplication.class)
                 .bannerMode(Banner.Mode.CONSOLE)
