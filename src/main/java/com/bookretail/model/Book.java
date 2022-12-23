@@ -4,17 +4,16 @@ package com.bookretail.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
+import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamicUpdate
 @Table(name = "books")
+@Setter
 public class Book {
 
 
@@ -34,7 +33,15 @@ public class Book {
 
     private String description;
 
-    @NotNull
     @OneToOne(mappedBy = "book", fetch = FetchType.EAGER)
     private BookDetail bookDetail;
+
+    public Book(String title, String author, String isbn, String publisher, String year, String description) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.publisher = publisher;
+        this.year = year;
+        this.description = description;
+    }
 }

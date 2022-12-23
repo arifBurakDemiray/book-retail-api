@@ -5,16 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookCreateDto {
+public class BookDto {
 
-    @NotBlank(message = "{validation.book.title.not_blank}")
+    @Schema
+    private Long id;
+
     @Schema
     private String title;
 
@@ -33,13 +31,9 @@ public class BookCreateDto {
     @Schema
     private String description;
 
-    @Positive(message = "{validation.generic.number.positive}")
-    @NotNull(message = "{validation.generic.entity.not_null}")
     @Schema
     private Double price;
 
-    @Positive(message = "{validation.generic.number.positive}")
-    @NotNull(message = "{validation.generic.entity.not_null}")
     @Schema
     private Long stock;
 }

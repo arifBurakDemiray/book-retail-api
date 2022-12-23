@@ -1,12 +1,12 @@
 CREATE TABLE books
 (
-    id          bigint       not null AUTO_INCREMENT primary key,
+    id          bigint not null AUTO_INCREMENT primary key,
     title       varchar(255),
     author      varchar(255),
-    isbn        varchar(255) not null unique,
+    isbn        varchar(255),
     publisher   varchar(255),
-    year        varchar(255) not null,
-    description varchar(255) not null
+    year        varchar(255),
+    description varchar(255)
 );
 
 CREATE TABLE book_details

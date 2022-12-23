@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Positive;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,8 +31,10 @@ public class BookUpdateDto {
     private String description;
 
     @Schema
+    @Positive(message = "{validation.generic.number.positive}")
     private Double price;
 
     @Schema
+    @Positive(message = "{validation.generic.number.positive}")
     private Long stock;
 }
