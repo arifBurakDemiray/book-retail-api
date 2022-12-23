@@ -24,14 +24,14 @@ application:
   cron: '0 30 3 * * *'
   aws:
     s3:
-      bucket-name: 
-      access-key: 
-      secret-key: 
-      region: 
+      bucket-name: none
+      access-key: none
+      secret-key: none
+      region: eu-west-1
   tmp-folder: tmp
 onesignal:
-  app-id: 
-  api-key: 
+  app-id:
+  api-key:
 spring:
   profiles:
     active: '@primaryProfile@-@secondaryProfile@'
@@ -114,16 +114,11 @@ server:
     whitelabel:
       enabled: false
   port: 5000
-springfox:
-  documentation:
-    swaggerUi:
-      baseUrl: '@doc_base_path@'
-    openApi:
-      v3:
-        path: '@doc_base_path@/v3/api-docs'
-    swagger:
-      v2:
-        path: '@doc_base_path@/v2/api-docs'
+springdoc:
+  swagger-ui:
+    doc-expansion: none
+    disable-swagger-default-url: true
+    path: '@doc_base_path@/index.html'
 logging:
   file:
     name: '@logger_folder@/@logger_filename@.log'
@@ -136,8 +131,8 @@ logging:
             sql:
               BasicBinder: error
 aws:
-  access-key: 
-  secret-key: 
+  access-key: none
+  secret-key: none
 ssl:
   domain: @ssl_domain@
   email: @ssl_email@

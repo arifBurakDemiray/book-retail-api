@@ -13,7 +13,7 @@ ${Ansi.DEFAULT}${AnsiColor.RED}
  ${AnsiStyle.BOLD}Profile               :${AnsiStyle.NORMAL} ${spring.profiles.active}
 ${AnsiColor.BRIGHT_RED}--------------------------------------------------------------${Ansi.DEFAULT}
  ${AnsiStyle.BOLD}Base Url              :${AnsiStyle.NORMAL} ${application.url}
- ${AnsiStyle.BOLD}Swagger Url           :${AnsiStyle.NORMAL} ${application.url}@doc_base_path@
+ ${AnsiStyle.BOLD}Swagger Url           :${AnsiStyle.NORMAL} ${application.url}@doc_base_path@/index.html
  ${AnsiStyle.BOLD}Spring Actuator Url   :${AnsiStyle.NORMAL} ${application.url}@actuator_base_path@
  ${AnsiStyle.BOLD}Log file              :${AnsiStyle.NORMAL} ${logging.file.name}
 ${AnsiColor.BRIGHT_RED}--------------------------------------------------------------${Ansi.DEFAULT}

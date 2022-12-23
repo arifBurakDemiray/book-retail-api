@@ -1,11 +1,11 @@
 package com.bookretail.dto;
 
+import com.bookretail.enums.EErrorCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
-import com.bookretail.enums.EErrorCode;
 
 
 public class Response<T> {
@@ -57,9 +57,9 @@ public class Response<T> {
 
     private static class ErrorObject {
 
-        @ApiModelProperty(example = "400")
+        @Schema(example = "400")
         private final EErrorCode code;
-        @ApiModelProperty(example = "Bad Request")
+        @Schema(example = "Bad Request")
         private final String message;
 
         ErrorObject(String message, EErrorCode code) {

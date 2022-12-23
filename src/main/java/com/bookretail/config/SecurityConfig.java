@@ -1,5 +1,7 @@
 package com.bookretail.config;
 
+import com.bookretail.config.security.JwtFilter;
+import com.bookretail.util.service.UserDetailService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +21,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import com.bookretail.config.security.JwtFilter;
-import com.bookretail.util.service.UserDetailService;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -32,10 +32,6 @@ import com.bookretail.util.service.UserDetailService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${management.endpoints.web.base-path}")
     private String managementBaseUrl;
-
-    @Value("${springfox.documentation.swaggerUi.baseUrl}")
-    private String documentationBaseUrl;
-
 
     private final JwtFilter jwtFilter;
     private final UserDetailService userService;
@@ -69,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Set permissions on endpoints
         http.authorizeRequests()
-                .antMatchers(documentationBaseUrl + "/**/*").permitAll()
+                .antMatchers("documentation" + "/**/*").permitAll()
                 .antMatchers(managementBaseUrl + "/**").hasRole("SYSADMIN");
 
         http.addFilterBefore(

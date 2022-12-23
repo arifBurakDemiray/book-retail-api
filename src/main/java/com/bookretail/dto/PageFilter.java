@@ -1,6 +1,6 @@
 package com.bookretail.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,16 +15,16 @@ import org.springframework.data.domain.Sort;
 @Setter
 public class PageFilter {
 
-    @ApiModelProperty(notes = "If you do not give, its default value is 20")
+    @Schema(description = "If you do not give, its default value is 20")
     private Integer page_size;
 
-    @ApiModelProperty(notes = "If you do not give, its default value is 0")
+    @Schema(description = "If you do not give, its default value is 0")
     private Integer page;
 
-    @ApiModelProperty(notes = "If you do not give, you can not sort given items")
+    @Schema(description = "If you do not give, you can not sort given items")
     private Sort.Direction direction;
 
-    @ApiModelProperty(notes = "It is the field by sorted, if you do not give you can not sort given items")
+    @Schema(description = "It is the field by sorted, if you do not give you can not sort given items")
     private String fields;
 
     public Pageable asPageable() {

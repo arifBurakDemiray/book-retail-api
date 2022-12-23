@@ -1,6 +1,6 @@
 package com.bookretail.dto.generic;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public abstract class MessageDto {
 
-    @ApiModelProperty(example = "Successful")
+    @Schema(example = "Successful")
     private String message;
 }

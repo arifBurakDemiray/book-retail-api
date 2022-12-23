@@ -1,15 +1,15 @@
 package com.bookretail.dto.user;
 
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
 import com.bookretail.dto.auth.RegisterDto;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
 
 @Getter
 public class UserDto extends RegisterDto {
-    @ApiModelProperty
+    @Schema
     private final Long companyUserId;
 
-    @ApiModelProperty(example = "COMPANY_ADMIN")
+    @Schema(example = "COMPANY_ADMIN")
     private final String role;
 
     public UserDto(Long companyUserId, String role, Long id, String name, String surname, String email, String phone) {

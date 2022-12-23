@@ -1,6 +1,6 @@
 package com.bookretail.dto.user;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class ProfilePictureUpdateDto {
-    @ApiModelProperty(example = "https://example.com/img.png")
+    @Schema(example = "https://example.com/img.png")
     private String url;
 }

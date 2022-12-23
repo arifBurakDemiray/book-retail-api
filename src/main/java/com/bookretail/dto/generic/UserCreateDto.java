@@ -1,10 +1,10 @@
 package com.bookretail.dto.generic;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.bookretail.util.ReadingIsGoodRegex;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.bookretail.util.ReadingIsGoodRegex;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
@@ -14,21 +14,21 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserCreateDto {
-    @ApiModelProperty(example = "Ali")
+    @Schema(example = "Ali")
     private String name;
 
-    @ApiModelProperty(example = "Veli")
+    @Schema(example = "Veli")
     private String surname;
 
     @Email(regexp = ReadingIsGoodRegex.EMAIL, message = "{validation.generic.email.unfit_regex}")
-    @ApiModelProperty(required = true, example = "ali.veli@example.com")
+    @Schema(required = true, example = "ali.veli@example.com")
     private String email;
 
-    @ApiModelProperty(example = "5079696533")
+    @Schema(example = "5079696533")
     @Pattern(regexp = ReadingIsGoodRegex.PHONE, message = "{validation.generic.phone.unfit_regex}")
     private String phone;
 
     @Positive
-    @ApiModelProperty
+    @Schema
     private Long parkingId;
 }

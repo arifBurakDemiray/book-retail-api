@@ -1,7 +1,7 @@
 package com.bookretail.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -10,19 +10,19 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RegisterDto {
 
-    @ApiModelProperty(example = "0")
+    @Schema(example = "0")
     public Long id;
 
-    @ApiModelProperty(example = "Ali")
+    @Schema(example = "Ali")
     public String name;
 
-    @ApiModelProperty(example = "Veli")
+    @Schema(example = "Veli")
     public String surname;
 
-    @ApiModelProperty(required = true, example = "ali.veli@example.com")
+    @Schema(required = true, example = "ali.veli@example.com")
     public String email;
 
-    @ApiModelProperty(example = "5079696533")
+    @Schema(example = "5079696533")
     public String phone;
 
 }
