@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto11
+      nodejs: 12
+    commands:
+      - echo installing yarn...
+      - npm install -g yarn
+  pre_build:
+    commands:
+      - echo SPRING_PROFILE is $SPRING_PROFILE
+      - echo installing nodejs dependencies...
+      - yarn install
+  build:
+    commands:
+      - echo building...
+      - mvn compile
+  post_build:
+    commands:
+      - echo creating jar executable...
+      - mvn package -P"$SPRING_PROFILE" -DskipTests
+      - echo copying bundle files...
+      - yarn artifacts
+artifacts:
+  files:
+    - './**/*'
+  base-directory: dist/files

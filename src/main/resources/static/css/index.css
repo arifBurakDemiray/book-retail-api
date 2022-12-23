@@ -1,0 +1,34 @@
+body {
+    height: 100vh;
+}
+
+.root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #2d3748;
+    color: white;
+}
+
+.title {
+    font-family: monospace;
+    font-size: 2rem;
+    background-color: white;
+    color: #2d3748;
+    padding: 1px 4px;
+    font-weight: bold;
+    animation-name: title_animation;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes title_animation {
+    from {
+        background-color: white;
+    }
+    to {
+        background-color: #91c9ff;
+    }
+}

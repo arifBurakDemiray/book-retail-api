@@ -1,0 +1,129 @@
+{
+  "properties": [
+    {
+      "name": "application.url",
+      "type": "java.lang.String",
+      "description": "Web server root."
+    },
+    {
+      "name": "application.version",
+      "type": "java.lang.String",
+      "description": "Application version."
+    },
+    {
+      "name": "application.jwt.secret",
+      "type": "java.lang.String",
+      "description": "JWT encryption key."
+    },
+    {
+      "name": "application.db.url",
+      "type": "java.lang.String",
+      "description": "Database connection url."
+    },
+    {
+      "name": "application.db.username",
+      "type": "java.lang.String",
+      "description": "Database username."
+    },
+    {
+      "name": "application.db.password",
+      "type": "java.lang.String",
+      "description": "Database password."
+    },
+    {
+      "name": "application.db.driver",
+      "type": "java.lang.String",
+      "description": "Database driver."
+    },
+    {
+      "name": "application.db.dialect",
+      "type": "java.lang.String",
+      "description": "Database dialect."
+    },
+    {
+      "name": "application.mail.token.expiration",
+      "type": "java.lang.Integer",
+      "description": "Verification token expiration time in milliseconds."
+    },
+    {
+      "name": "application.jwt.client_id.web",
+      "type": "java.lang.String",
+      "description": "Client id for web application."
+    },
+    {
+      "name": "application.jwt.client_id.mobile",
+      "type": "java.lang.String",
+      "description": "Client id for mobile application."
+    },
+    {
+      "name": "application.cron",
+      "type": "java.lang.String",
+      "description": "Scheduled jobs execution time."
+    },
+    {
+      "name": "onesignal.app-id",
+      "type": "java.lang.String",
+      "description": "OneSignal application identifier."
+    },
+    {
+      "name": "onesignal.api-key",
+      "type": "java.lang.String",
+      "description": "OneSignal REST API key."
+    },
+    {
+      "name": "application.aws.s3.bucket-name",
+      "type": "java.lang.String",
+      "description": "AWS S3 Bucket storage name."
+    },
+    {
+      "name": "application.aws.s3.region",
+      "type": "java.lang.String",
+      "description": "AWS region."
+    },
+    {
+      "name": "aws.accessKeyId",
+      "type": "java.lang.String",
+      "description": "AWS secret key."
+    },
+    {
+      "name": "aws.secretKey",
+      "type": "java.lang.String",
+      "description": "AWS secret key."
+    },
+    {
+      "name": "application.tmp-folder",
+      "type": "java.lang.String",
+      "description": "Temporary folder (for example profile pictures)."
+    },
+    {
+      "name": "ssl.domain",
+      "type": "java.lang.String",
+      "description": "Domain for SSL certificate."
+    },
+    {
+      "name": "ssl.email",
+      "type": "java.lang.String",
+      "description": "Email for SSL certificate."
+    },
+    {
+      "name": "application.jwt.expiration.mobile.access_token",
+      "type": "java.lang.String",
+      "description": "JWT expiration for access token for mobile (millisecond)."
+    },
+    {
+      "name": "application.jwt.expiration.web.access_token",
+      "type": "java.lang.String",
+      "description": "JWT expiration for access token for web (millisecond)."
+    },
+    {
+      "name": "application.jwt.expiration.refresh_token",
+      "type": "java.lang.String",
+      "description": "JWT expiration for refresh token (millisecond)."
+    },
+    {
+      "name": "server.websocket.baseUrl",
+      "type": "java.lang.String",
+      "description": "Web socket endpoints' base url."
+    }
+  ]
+}

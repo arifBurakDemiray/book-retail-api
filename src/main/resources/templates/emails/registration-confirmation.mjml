@@ -1,0 +1,59 @@
+<mjml>
+    <mj-head>
+        <mj-title>[[#{template.email.registration-confirmation.subject}]]</mj-title>
+    </mj-head>
+    <mj-body>
+        <mj-section>
+            <mj-column>
+                <mj-include path="./includes/header.mjml"/>
+
+                <mj-text
+                        font-size="16px"
+                        font-family="helvetica"
+                >
+                    <b th:text="#{template.email.registration-confirmation.title(${name})}">Welcome!</b>
+                </mj-text>
+
+                <mj-text
+                        color="#000000"
+                        font-family="helvetica"
+                >
+                    <p th:text="#{template.email.registration-confirmation.subtitle}">Now you can reset your password!
+                    </p>
+                </mj-text>
+
+                <mj-button background-color="#00a8be">
+                    <a
+                            th:href="#{template.email.registration-confirmation.link(${code}, ${lang}, ${type})}"
+                            th:text="#{template.email.registration-confirmation.button}"
+                            style="color: white !important; text-decoration: none !important;"
+                    >
+                        Reset password
+                    </a>
+                </mj-button>
+
+                <mj-text
+                        color="#000000"
+                        font-family="helvetica"
+                >
+                    <p th:text="#{template.email.registration-confirmation.expiration}">
+                        You have 1 hour to choose your
+                        password. After this time, you will need to request a new password.
+                    </p>
+                </mj-text>
+
+                <mj-text
+                        color="#000000"
+                        font-family="helvetica"
+                >
+                    <p th:text="#{template.email.registration-confirmation.ignore}">
+                        Didn't you ask for a new password?
+                        You can ignore this email.
+                    </p>
+                </mj-text>
+
+                <mj-include path="./includes/footer.mjml"/>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>

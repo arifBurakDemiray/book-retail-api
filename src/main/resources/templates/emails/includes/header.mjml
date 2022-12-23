@@ -1,0 +1,15 @@
+<!--<mj-image-->
+<!--        width="100px"-->
+<!--        src="http://PROD_URL/static/img/favicon.png"-->
+<!--/>-->
+
+<mj-text
+        align="center"
+        color="#00a8be"
+        font-weight="900"
+        font-size="30px"
+>
+    ReadingIsGood
+</mj-text>
+
+<mj-divider border-color="#00a8be"/>

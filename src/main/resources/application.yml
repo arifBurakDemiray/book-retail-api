@@ -1,0 +1,143 @@
+application:
+  db:
+    url: '@db_url@'
+    username: '@db_username@'
+    password: '@db_password@'
+    driver: '@db_driver@'
+    dialect: '@db_dialect@'
+  jwt:
+    secret: '@jwt_secret@'
+    expiration:
+      web:
+        access_token: '@jwt_expiration_web@'
+      mobile:
+        access_token: '@jwt_expiration_mobile@'
+    client_id:
+      web: '@jwt_client_id_web@'
+      mobile: '@jwt_client_id_mobile@'
+  verification_key:
+    expiration:
+      password_reset: '@expiration_password_reset@'
+      activation: '@expiration_activation@'
+  version: '@app_version@'
+  url: '@app_url@'
+  cron: '0 30 3 * * *'
+  aws:
+    s3:
+      bucket-name: 
+      access-key: 
+      secret-key: 
+      region: 
+  tmp-folder: tmp
+onesignal:
+  app-id: 
+  api-key: 
+spring:
+  profiles:
+    active: '@primaryProfile@-@secondaryProfile@'
+  datasource:
+    url: '@db_url@'
+    username: '@db_username@'
+    password: '@db_password@'
+    driver-class-name: '@db_driver@'
+  mail:
+    host: '@mail_host@'
+    username: '@mail_username@'
+    password: '@mail_password@'
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enabled: true
+            required: true
+    port: '@mail_port@'
+  jpa:
+    properties:
+      hibernate:
+        dialect: '@db_dialect@'
+        connection:
+          handling_mode: delayed_acquisition_and_release_after_transaction
+      javax:
+        persistence:
+          provider: org.hibernate.jpa.HibernatePersistenceProvider
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  liquibase:
+    enabled: false
+  h2:
+    console:
+      enabled: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+  thymeleaf:
+    template-resolver-order: 0
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: true
+    enable-spring-el-compiler: true
+    mode: HTML
+    encoding: UTF-8
+    enabled: true
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 5MB
+      max-request-size: 10MB
+    tomcat:
+      max-swallow-size: 25MB # Must be bigger than upper ones.
+management:
+  endpoints:
+    web:
+      base-path: '@actuator_base_path@'
+      exposure:
+        include:
+          - health
+          - logfile
+          - loggers
+server:
+  websocket:
+    baseUrl: '@websocket_base_path@'
+  servlet:
+    context-path: /
+  error:
+    whitelabel:
+      enabled: false
+  port: 5000
+springfox:
+  documentation:
+    swaggerUi:
+      baseUrl: '@doc_base_path@'
+    openApi:
+      v3:
+        path: '@doc_base_path@/v3/api-docs'
+    swagger:
+      v2:
+        path: '@doc_base_path@/v2/api-docs'
+logging:
+  file:
+    name: '@logger_folder@/@logger_filename@.log'
+  level:
+    org:
+      hibernate:
+        SQL: error
+        type:
+          descriptor:
+            sql:
+              BasicBinder: error
+aws:
+  access-key: 
+  secret-key: 
+ssl:
+  domain: @ssl_domain@
+  email: @ssl_email@
