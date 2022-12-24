@@ -1,5 +1,6 @@
 package com.bookretail.model;
 
+import com.bookretail.enums.ERole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -9,7 +10,6 @@ import org.hibernate.validator.constraints.URL;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.bookretail.enums.ERole;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -55,6 +55,10 @@ public class User implements UserDetails, Serializable {
     @Column(nullable = false)
     @CreationTimestamp
     private Date createdOn;
+
+    @Getter
+    @Setter
+    private Double money;
 
     @Getter
     @Setter

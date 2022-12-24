@@ -3,7 +3,9 @@ package com.bookretail.service;
 import com.bookretail.config.security.JwtUtil;
 import com.bookretail.dto.PageFilter;
 import com.bookretail.dto.Response;
+import com.bookretail.dto.order.OrderCreateDto;
 import com.bookretail.dto.order.OrderDto;
+import com.bookretail.dto.order.OrderUpdateDto;
 import com.bookretail.enums.EDetail;
 import com.bookretail.enums.EErrorCode;
 import com.bookretail.factory.OrderFactory;
@@ -59,5 +61,15 @@ public class OrderService {
         }
 
         return Response.ok(orderFactory.createOrderDto(maybeOrder.get(), EDetail.MORE));
+    }
+
+    @Transactional
+    public Response<OrderDto> createOrder(String token, OrderCreateDto body) {
+        return Response.ok(null);
+    }
+
+    @Transactional
+    public Response<OrderDto> updateOrder(Long id, String token, OrderUpdateDto body) {
+        return Response.ok(null);
     }
 }

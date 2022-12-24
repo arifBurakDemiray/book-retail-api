@@ -1,14 +1,9 @@
 package com.bookretail.service;
 
-import lombok.AllArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import com.bookretail.config.security.JwtUtil;
 import com.bookretail.dto.Response;
 import com.bookretail.dto.auth.ProfileDto;
+import com.bookretail.dto.message.BasicResponse;
 import com.bookretail.dto.user.ProfilePictureUpdateDto;
 import com.bookretail.enums.EErrorCode;
 import com.bookretail.factory.UserFactory;
@@ -16,6 +11,12 @@ import com.bookretail.repository.UserRepository;
 import com.bookretail.util.ImageUtils;
 import com.bookretail.util.service.storage.IStorageService;
 import com.bookretail.validator.UserValidator;
+import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -40,7 +41,6 @@ public class UserService {
         return Response.ok(userFactory.createProfileDto(user));
     }
 
-    // TODO: we must declare meaningful exceptions. Especially for StorageService.
     public Response<ProfilePictureUpdateDto> updateProfilePicture(String token, MultipartFile file) {
         var userId = jwtTokenUtil.getUserId(token);
         var validation = userValidator.validate(file);
@@ -90,5 +90,21 @@ public class UserService {
             return Response.notOk(messageSource
                     .getMessage("update_profile_picture.io.fail"), EErrorCode.UNHANDLED);
         }
+    }
+
+    @Transactional
+    public Response<BasicResponse> depositMoney(String token, Double amount) {
+        
+        if (amount <= 0) {
+            return Response.notOk(messageSource.getMessage("validation.generic.number.positive"),
+                    EErrorCode.BAD_REQUEST);
+        }
+
+        var user = userRepository.getById(jwtTokenUtil.getUserId(token));
+        user.setMoney(amount + user.getMoney());
+        userRepository.save(user);
+
+
+        return Response.ok(new BasicResponse(messageSource.getMessage("update.user.money.success")));
     }
 }

@@ -2,6 +2,7 @@ package com.bookretail.controller;
 
 import com.bookretail.dto.Response;
 import com.bookretail.dto.auth.ProfileDto;
+import com.bookretail.dto.message.BasicResponse;
 import com.bookretail.dto.user.ProfilePictureUpdateDto;
 import com.bookretail.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +34,15 @@ public class UserController {
             @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false) String token
     ) {
         return userService.getProfile(token).toResponseEntity();
+    }
+
+    @PatchMapping
+    @Operation(summary = "Deposit money to user's account.")
+    public ResponseEntity<Response<BasicResponse>> depositMoney(
+            @RequestParam Double amount,
+            @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false) String token
+    ) {
+        return userService.depositMoney(token, amount).toResponseEntity();
     }
 
     @RequestMapping(
