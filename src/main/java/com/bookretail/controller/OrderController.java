@@ -5,6 +5,8 @@ import com.bookretail.dto.PageFilter;
 import com.bookretail.dto.Response;
 import com.bookretail.dto.order.OrderDto;
 import com.bookretail.service.OrderService;
+import com.bookretail.specification.OrderFilterParams;
+import com.bookretail.specification.OrderFilterSpec;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -27,10 +29,12 @@ public class OrderController {
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
+    @OrderFilterParams
     public ResponseEntity<Response<Page<OrderDto>>> getAllOrdersForCustomer(
             PageFilter pageFilter,
+            @Parameter(hidden = true) OrderFilterSpec spec,
             @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false) String token) {
-        return orderService.getAll(token, pageFilter).toResponseEntity();
+        return orderService.getAll(token, spec, pageFilter).toResponseEntity();
     }
 
     @GetMapping("/{id}")

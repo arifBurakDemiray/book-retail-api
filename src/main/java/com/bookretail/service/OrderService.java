@@ -7,11 +7,14 @@ import com.bookretail.dto.order.OrderDto;
 import com.bookretail.enums.EDetail;
 import com.bookretail.enums.EErrorCode;
 import com.bookretail.factory.OrderFactory;
+import com.bookretail.model.Order;
 import com.bookretail.repository.OrderRepository;
+import com.bookretail.util.SpecUtil;
 import com.bookretail.validator.OrderValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,13 +33,13 @@ public class OrderService {
     private final MessageSourceAccessor messageSource;
 
     @Transactional(readOnly = true)
-    public Response<Page<OrderDto>> getAll(String token, PageFilter pageFilter) {
+    public Response<Page<OrderDto>> getAll(String token, Specification<Order> spec, PageFilter pageFilter) {
         var userId = jwtUtil.getUserId(token);
         var role = jwtUtil.getUserRole(token);
 
         return Response.ok(
                 orderRepository
-                        .findAll(orderFactory.getByUserId(userId, role), pageFilter.asPageable())
+                        .findAll(SpecUtil.and(spec, orderFactory.getByUserId(userId, role)), pageFilter.asPageable())
                         .map(order -> orderFactory.createOrderDto(order, EDetail.LESS))
         );
     }
