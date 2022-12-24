@@ -47,6 +47,7 @@ public class Order {
     @CreationTimestamp
     private Date createdAt;
 
+    @CreationTimestamp
     private Date updatedAt;
 
 }

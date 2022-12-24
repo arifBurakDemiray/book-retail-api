@@ -24,7 +24,8 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Response<Page<OrderDto>> getAll(String token, PageFilter pageFilter) {
         var userId = jwtUtil.getUserId(token);
+        var role = jwtUtil.getUserRole(token);
 
-        return Response.ok(orderRepository.findAll(orderFactory.getByUserId(userId), pageFilter.asPageable()).map(orderFactory::createOrderDto));
+        return Response.ok(orderRepository.findAll(orderFactory.getByUserId(userId, role), pageFilter.asPageable()).map(orderFactory::createOrderDto));
     }
 }
