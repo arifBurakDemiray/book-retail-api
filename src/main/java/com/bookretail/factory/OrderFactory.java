@@ -2,6 +2,7 @@ package com.bookretail.factory;
 
 import com.bookretail.dto.auth.RegisterDto;
 import com.bookretail.dto.book.BookDto;
+import com.bookretail.dto.order.OrderCreateDto;
 import com.bookretail.dto.order.OrderDto;
 import com.bookretail.enums.EDetail;
 import com.bookretail.enums.ERole;
@@ -62,6 +63,15 @@ public class OrderFactory {
                 user.getSurname(),
                 user.getEmail(),
                 user.getPhoneNumber()
+        );
+    }
+
+    public Order createOrder(OrderCreateDto body, User user, Book book) {
+        return new Order(
+                body.getQuantity(),
+                body.getQuantity() * book.getBookDetail().getPrice(),
+                book,
+                user
         );
     }
 }

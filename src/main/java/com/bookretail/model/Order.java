@@ -4,6 +4,7 @@ import com.bookretail.enums.EOrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Order {
     private Long id;
 
     @NotNull
+    @Setter
     @Column(nullable = false)
     private EOrderStatus status;
 
@@ -48,6 +50,15 @@ public class Order {
     private Date createdAt;
 
     @CreationTimestamp
+    @Setter
     private Date updatedAt;
+
+    public Order(Long quantity, Double cost, Book book, User user) {
+        status = EOrderStatus.PENDING;
+        this.quantity = quantity;
+        this.cost = cost;
+        this.book = book;
+        this.user = user;
+    }
 
 }
