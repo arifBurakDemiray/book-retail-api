@@ -12,10 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = OrderController.tag, description = OrderController.description)
@@ -34,5 +31,13 @@ public class OrderController {
             PageFilter pageFilter,
             @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false) String token) {
         return orderService.getAll(token, pageFilter).toResponseEntity();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<OrderDto>> getById(
+            @PathVariable Long id,
+            @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false) String token) {
+        return orderService.getById(id, token).toResponseEntity();
+
     }
 }

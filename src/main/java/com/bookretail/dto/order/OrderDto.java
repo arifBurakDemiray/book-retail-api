@@ -1,6 +1,9 @@
 package com.bookretail.dto.order;
 
+import com.bookretail.dto.auth.RegisterDto;
+import com.bookretail.dto.book.BookDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +13,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDto {
 
     private Long id;
@@ -27,5 +31,9 @@ public class OrderDto {
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date updatedAt;
+
+    private RegisterDto user;
+
+    private BookDto book;
 
 }

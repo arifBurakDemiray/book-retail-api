@@ -1,10 +1,11 @@
 package com.bookretail.factory;
 
+import com.bookretail.dto.auth.RegisterDto;
+import com.bookretail.dto.book.BookDto;
 import com.bookretail.dto.order.OrderDto;
+import com.bookretail.enums.EDetail;
 import com.bookretail.enums.ERole;
-import com.bookretail.model.Order;
-import com.bookretail.model.Order_;
-import com.bookretail.model.User_;
+import com.bookretail.model.*;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class OrderFactory {
         };
     }
 
-    public OrderDto createOrderDto(Order order) {
+    public OrderDto createOrderDto(Order order, EDetail detail) {
         return new OrderDto(
                 order.getId(),
                 order.getQuantity(),
@@ -34,7 +35,33 @@ public class OrderFactory {
                 order.getBook().getId(),
                 order.getUser().getId(),
                 order.getCreatedAt(),
-                order.getUpdatedAt()
+                order.getUpdatedAt(),
+                EDetail.isMore(detail) ? createUserDto(order.getUser()) : null,
+                EDetail.isMore(detail) ? createBookDto(order.getBook()) : null
+        );
+    }
+
+    private BookDto createBookDto(Book book) {
+        return new BookDto(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getIsbn(),
+                book.getPublisher(),
+                book.getYear(),
+                book.getDescription(),
+                book.getBookDetail().getPrice(),
+                book.getBookDetail().getStock()
+        );
+    }
+
+    private RegisterDto createUserDto(User user) {
+        return new RegisterDto(
+                user.getId(),
+                user.getName(),
+                user.getSurname(),
+                user.getEmail(),
+                user.getPhoneNumber()
         );
     }
 }
