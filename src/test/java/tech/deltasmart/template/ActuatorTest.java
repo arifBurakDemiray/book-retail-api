@@ -21,16 +21,16 @@ public class ActuatorTest {
 
     @Test
     public void Logfile_AccessDenied_WithoutToken() throws Exception {
-        mockMvc.perform(get(managementBaseUrl + "/" + "logfile")).andExpect(status().isUnauthorized());
+        mockMvc.perform(get(managementBaseUrl + "/" + "logfile")).andExpect(status().is(403));
     }
 
     @Test
     public void Health_AccessDenied_WithoutToken() throws Exception {
-        mockMvc.perform(get(managementBaseUrl + "/" + "health")).andExpect(status().isUnauthorized());
+        mockMvc.perform(get(managementBaseUrl + "/" + "health")).andExpect(status().is(403));
     }
 
     @Test
     public void Loggers_AccessDenied_WithoutToken() throws Exception {
-        mockMvc.perform(get(managementBaseUrl + "/" + "loggers")).andExpect(status().isUnauthorized());
+        mockMvc.perform(get(managementBaseUrl + "/" + "loggers")).andExpect(status().is(403));
     }
 }
