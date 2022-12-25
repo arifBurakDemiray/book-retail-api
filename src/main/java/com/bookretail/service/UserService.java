@@ -41,6 +41,7 @@ public class UserService {
         return Response.ok(userFactory.createProfileDto(user));
     }
 
+    @Transactional
     public Response<ProfilePictureUpdateDto> updateProfilePicture(String token, MultipartFile file) {
         var userId = jwtTokenUtil.getUserId(token);
         var validation = userValidator.validate(file);
@@ -78,7 +79,7 @@ public class UserService {
 
             // Update profile picture.
             user.setProfilePicture(url);
-            userRepository.saveAndFlush(user);
+            userRepository.save(user);
 
             // Delete previous picture if it is valid.
             if (previousUrl != null) {

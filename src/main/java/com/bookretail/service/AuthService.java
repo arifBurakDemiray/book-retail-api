@@ -1,17 +1,5 @@
 package com.bookretail.service;
 
-import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.bookretail.config.security.JwtUtil;
 import com.bookretail.dto.Response;
 import com.bookretail.dto.auth.*;
@@ -27,6 +15,18 @@ import com.bookretail.repository.VerificationCodeRepository;
 import com.bookretail.util.LoggableFuture;
 import com.bookretail.util.RandomUtil;
 import com.bookretail.validator.AuthValidator;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -111,7 +111,7 @@ public class AuthService {
         var user = device.getUser();
 
         device.setRefreshToken(generateRefreshToken(user));
-        deviceRepository.saveAndFlush(device);
+        deviceRepository.save(device);
 
         var accessToken = jwtUtil.generateAccessToken(user);
         var refreshToken = device.getRefreshToken();
@@ -129,6 +129,7 @@ public class AuthService {
         return RandomUtil.generateInvalid();
     }
 
+    @Transactional
     public Response<RegisterDto> register(@NotNull RegisterRequest body) {
         var user = userFactory.createUser(body);
 
@@ -138,7 +139,7 @@ public class AuthService {
             return Response.notOk(validationResult.getMessage(), EErrorCode.BAD_REQUEST);
         }
 
-        user = userRepository.saveAndFlush(user);
+        user = userRepository.save(user);
 
         var locale = LocaleContextHolder.getLocale();
 
