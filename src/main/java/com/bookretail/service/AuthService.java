@@ -68,12 +68,6 @@ public class AuthService {
             var authenticate = authenticationManager.authenticate(authentication);
             var user = (User) authenticate.getPrincipal();
 
-            var result = authValidator.validate(user, body.client_id);
-
-            if (result.isNotValid()) {
-                return LoginResponse.notOk(result.getMessage(), EErrorCode.UNAUTHORIZED);
-            }
-
             var refreshToken = generateRefreshToken(user);
 
             if (ERole.isMobileUser(ERole.stringValueOf(user.getRole()))) {

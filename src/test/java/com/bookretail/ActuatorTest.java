@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -21,16 +20,16 @@ public class ActuatorTest {
 
     @Test
     public void Logfile_AccessDenied_WithoutToken() throws Exception {
-        mockMvc.perform(get(managementBaseUrl + "/" + "logfile")).andExpect(status().is(403));
+        mockMvc.perform(MockMvcRequestBuilders.get(managementBaseUrl + "/" + "logfile")).andExpect(MockMvcResultMatchers.status().is(403));
     }
 
     @Test
     public void Health_AccessDenied_WithoutToken() throws Exception {
-        mockMvc.perform(get(managementBaseUrl + "/" + "health")).andExpect(status().is(403));
+        mockMvc.perform(MockMvcRequestBuilders.get(managementBaseUrl + "/" + "health")).andExpect(MockMvcResultMatchers.status().is(403));
     }
 
     @Test
     public void Loggers_AccessDenied_WithoutToken() throws Exception {
-        mockMvc.perform(get(managementBaseUrl + "/" + "loggers")).andExpect(status().is(403));
+        mockMvc.perform(MockMvcRequestBuilders.get(managementBaseUrl + "/" + "loggers")).andExpect(MockMvcResultMatchers.status().is(403));
     }
 }
