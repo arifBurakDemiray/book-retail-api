@@ -1,9 +1,5 @@
 package com.bookretail.validator;
 
-import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.stereotype.Component;
 import com.bookretail.dto.auth.*;
 import com.bookretail.enums.EClientId;
 import com.bookretail.enums.EGrantType;
@@ -13,6 +9,10 @@ import com.bookretail.model.User;
 import com.bookretail.repository.UserRepository;
 import com.bookretail.repository.VerificationCodeRepository;
 import com.bookretail.util.ReadingIsGoodRegex;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
@@ -178,4 +178,5 @@ public class AuthValidator {
 
         return ValidationResult.success();
     }
+    
 }

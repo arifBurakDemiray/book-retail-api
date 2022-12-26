@@ -1,6 +1,9 @@
 package com.bookretail.factory;
 
+import com.bookretail.dto.auth.LoginRequest;
 import com.bookretail.dto.auth.ProfileDto;
+import com.bookretail.dto.auth.RegisterRequest;
+import com.bookretail.enums.EGrantType;
 import com.bookretail.enums.ERole;
 import com.bookretail.model.User;
 
@@ -38,6 +41,10 @@ public class UserTestFactory {
 
     public static String profile_photo_USER = "http://localhost:5000/profile_picture.png";
 
+    public static RegisterRequest createRegisterRequest() {
+        return new RegisterRequest("Name", "Surname", "example@hotmail.com", "password", "05555555555");
+    }
+
     public static ProfileDto createProfileDto(User user) {
         return new ProfileDto(
                 user.getId(),
@@ -61,5 +68,25 @@ public class UserTestFactory {
         user.setId(2L);
 
         return user;
+    }
+
+    public static LoginRequest createLoginRequest(EGrantType grantType) {
+        return new LoginRequest(
+                grantType,
+                "client_id",
+                "secret",
+                "username",
+                "password",
+                "ABC123");
+    }
+
+    public static LoginRequest createLoginRequestSecretNull(EGrantType grantType) {
+        return new LoginRequest(
+                grantType,
+                "client_id",
+                null,
+                "username",
+                "password",
+                "ABC123");
     }
 }

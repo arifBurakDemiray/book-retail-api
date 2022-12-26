@@ -9,7 +9,6 @@ import com.bookretail.repository.UserRepository;
 import com.bookretail.util.service.storage.IStorageService;
 import com.bookretail.validator.UserValidator;
 import com.bookretail.validator.ValidationResult;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,7 +55,7 @@ class UserServiceTest {
     @Nested
     class GetProfile_Method_Test_Cases {
         @Test
-        void Test_Get_Profile() {
+        void Test_GetProfile() {
             //given
             var user = UserTestFactory.createSuccessTestUser_USER();
             var response = UserTestFactory.createProfileDto(user);
@@ -80,10 +79,53 @@ class UserServiceTest {
     }
 
     @Nested
-    class Update_Profile_Picture_Method_Test_Cases {
+    class DepositMoney_Method_Test_Cases {
         @Test
-        @DisplayName("Test updateProfilePicture when validation.isNotValid() is true")
-        void testUpdateProfilePicture() {
+        void DepositMoney_Success() {
+
+            var user = UserTestFactory.createSuccessTestUser_USER();
+            var token = UserTestFactory.token_USER;
+            var resultMsg = "update.user.money.success";
+            user.setMoney(1000.0);
+
+            //when
+            when(messageSourceAccessor.getMessage((String) any())).thenReturn(resultMsg);
+            when(jwtUtil.getUserId(any())).thenReturn(user.getId());
+            when(userRepository.getById(any())).thenReturn(user);
+            when(userRepository.save(any())).thenReturn(user);
+
+            var depositResponse = userService.depositMoney(token, 1000.0);
+
+            //then
+            assertTrue(depositResponse.isOk());
+            assertEquals(depositResponse.getData().getContent(), resultMsg);
+            verify(jwtUtil).getUserId(any());
+            verify(userRepository, times(1)).getById(user.getId());
+            verify(userRepository).save(any());
+        }
+
+        @Test
+        void DepositMoney_NotPositiveMoney() {
+
+            var user = UserTestFactory.createSuccessTestUser_USER();
+            var token = UserTestFactory.token_USER;
+
+            //when
+            when(messageSourceAccessor.getMessage((String) any())).thenReturn("validation.generic.number.positive");
+
+            var depositResponse = userService.depositMoney(token, -1000.0);
+
+            //then
+            assertTrue(depositResponse.isNotOk());
+            verify(userRepository, times(0)).getById(user.getId());
+            verify(userRepository, times(0)).save(any());
+        }
+    }
+
+    @Nested
+    class UpdateProfilePicture_Method_Test_Cases {
+        @Test
+        void UpdateProfilePicture_Validation_Fails() {
             //given
             var validationResult = mock(ValidationResult.class);
             var user = UserTestFactory.createSuccessTestUser_USER();
@@ -102,8 +144,7 @@ class UserServiceTest {
         }
 
         @Test
-        @DisplayName("Test updateProfilePicture when maybeUser.isEmpty() is true")
-        void testUpdateProfilePicture2() {
+        void UpdateProfilePicture_User_Not_Found() {
             //given
             var validationResult = mock(ValidationResult.class);
             var user = UserTestFactory.createSuccessTestUser_USER();
@@ -126,8 +167,7 @@ class UserServiceTest {
         }
 
         @Test
-        @DisplayName("Test updateProfilePicture when maybeUser.isEmpty() is false")
-        void testUpdateProfilePicture3() throws IOException {
+        void UpdateProfilePicture_Success() throws IOException {
             //given
             var validationResult = mock(ValidationResult.class);
             var user = UserTestFactory.createSuccessTestUser_USER();
@@ -160,9 +200,7 @@ class UserServiceTest {
         }
 
         @Test
-        @DisplayName("Test updateProfilePicture when maybeUser.isEmpty() is false and throw IOException " +
-                "and cathcing it")
-        void testUpdateProfilePicture4() throws IOException {
+        void UpdateProfilePicture_Fails_With_Exception() throws IOException {
             //given
             var validationResult = mock(ValidationResult.class);
             var user = UserTestFactory.createSuccessTestUser_USER();
