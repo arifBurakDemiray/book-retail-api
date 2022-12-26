@@ -36,8 +36,9 @@ public class AwsConfig {
 
     @PostConstruct()
     protected void init() {
-        if (!profile.equals("dev") && !profile.equals("prod"))
-            throw new IllegalStateException("Profile must be start with 'dev' or 'prod'.");
+        if (!profile.equals("dev") && !profile.equals("prod") && !profile.equals("test")) {
+            throw new IllegalStateException("Profile must be start with 'dev' or 'prod' or 'test'.");
+        }
 
         baseUrl = profile;
         credentials = AwsBasicCredentials.create(accessKey, secretKey);

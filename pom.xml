@@ -41,6 +41,27 @@
             </build>
         </profile>
         <profile>
+            <id>test</id>
+            <properties>
+                <primaryProfile>test</primaryProfile>
+                <secondaryProfile>server</secondaryProfile>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <filters>
+                    <filter>src/main/resources/filters/test/app.properties</filter>
+                    <filter>src/main/resources/filters/test/banner.properties</filter>
+                    <filter>src/main/resources/filters/test/db.properties</filter>
+                    <filter>src/main/resources/filters/test/jwt.properties</filter>
+                    <filter>src/main/resources/filters/test/logger.properties</filter>
+                    <filter>src/main/resources/filters/test/mail.properties</filter>
+                    <filter>src/main/resources/filters/test/verification_code.properties</filter>
+                </filters>
+            </build>
+        </profile>
+        <profile>
             <id>prod</id>
             <properties>
                 <primaryProfile>prod</primaryProfile>
@@ -281,6 +302,11 @@
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>3.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

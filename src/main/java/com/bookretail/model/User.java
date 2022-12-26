@@ -21,7 +21,8 @@ import java.util.*;
 public class User implements UserDetails, Serializable {
     @Id
     @Getter
-    @Column()
+    @Setter
+    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

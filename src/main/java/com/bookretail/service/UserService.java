@@ -95,7 +95,7 @@ public class UserService {
 
     @Transactional
     public Response<BasicResponse> depositMoney(String token, Double amount) {
-        
+
         if (amount <= 0) {
             return Response.notOk(messageSource.getMessage("validation.generic.number.positive"),
                     EErrorCode.BAD_REQUEST);

@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ActuatorTest {
+class ActuatorTest {
     @Value("${management.endpoints.web.base-path}")
     private String managementBaseUrl;
 
@@ -19,17 +19,17 @@ public class ActuatorTest {
     private MockMvc mockMvc;
 
     @Test
-    public void Logfile_AccessDenied_WithoutToken() throws Exception {
+    void Logfile_AccessDenied_WithoutToken() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(managementBaseUrl + "/" + "logfile")).andExpect(MockMvcResultMatchers.status().is(403));
     }
 
     @Test
-    public void Health_AccessDenied_WithoutToken() throws Exception {
+    void Health_AccessDenied_WithoutToken() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(managementBaseUrl + "/" + "health")).andExpect(MockMvcResultMatchers.status().is(403));
     }
 
     @Test
-    public void Loggers_AccessDenied_WithoutToken() throws Exception {
+    void Loggers_AccessDenied_WithoutToken() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(managementBaseUrl + "/" + "loggers")).andExpect(MockMvcResultMatchers.status().is(403));
     }
 }
