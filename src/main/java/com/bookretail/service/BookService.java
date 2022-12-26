@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookService {
 
     private final BookRepository bookRepository;
-
     private final MessageSourceAccessor messageSource;
     private final BookDetailRepository bookDetailRepository;
     private final BookFactory bookFactory;
