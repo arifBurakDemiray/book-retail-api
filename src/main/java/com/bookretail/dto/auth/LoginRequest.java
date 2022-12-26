@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
+@Getter
 public class LoginRequest {
     @NotNull(message = "{login_request.grant_type.empty}")
     @Schema(required = true, example = "password")

@@ -2,12 +2,14 @@ package com.bookretail.factory;
 
 import com.bookretail.dto.auth.LoginRequest;
 import com.bookretail.dto.auth.ProfileDto;
+import com.bookretail.dto.auth.RegisterDto;
 import com.bookretail.dto.auth.RegisterRequest;
 import com.bookretail.enums.EGrantType;
 import com.bookretail.enums.ERole;
 import com.bookretail.model.User;
 
 import java.util.Date;
+import java.util.UUID;
 
 
 public class UserTestFactory {
@@ -44,7 +46,21 @@ public class UserTestFactory {
     public static String profile_photo_USER = "http://localhost:5000/profile_picture.png";
 
     public static RegisterRequest createRegisterRequest() {
-        return new RegisterRequest("Name", "Surname", "example@hotmail.com", "password", "05555555555");
+        return new RegisterRequest("Ali", "Veli", "ali.veli@example.com",
+                "p4ssw0rd123", "5079696533");
+    }
+
+    public static RegisterDto createRegisterDto() {
+        return new RegisterDto(123L, "Ali", "Veli", "ali.veli@example.com", "5079696533");
+    }
+
+    public static String createRandomCode() {
+        return UUID.randomUUID().toString();
+    }
+
+    public static LoginRequest createLoginRequest() {
+        return new LoginRequest(EGrantType.password, "1da989ab-3d4e-4d79-a79e-5ca2e7b6345e",
+                "client secret", "username", "p4ssw0rd", "refresh token");
     }
 
     public static ProfileDto createProfileDto(Date resultCreatedAt) {

@@ -64,7 +64,7 @@ class UserControllerTest {
 
 
     @Nested
-    class GetProfile_Method_Test_Cases {
+    class GetProfile_Endpoint_Test_Cases {
 
         @Test
         @WithMockUser("spring")
@@ -123,7 +123,7 @@ class UserControllerTest {
 
 
     @Nested
-    class DepositMoney_Method_Test_Cases {
+    class DepositMoney_Endpoint_Test_Cases {
 
         @Test
         @WithMockUser("spring")
@@ -180,7 +180,7 @@ class UserControllerTest {
     }
 
     @Nested
-    class GetProfilePictureUrl_Method_Test_Cases {
+    class GetProfilePictureUrl_Endpoint_Test_Cases {
 
         @Test
         @WithMockUser("spring")
