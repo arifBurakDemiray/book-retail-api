@@ -3,9 +3,8 @@ package com.bookretail.controller;
 import com.bookretail.dto.Response;
 import com.bookretail.dto.book.BookCreateDto;
 import com.bookretail.dto.book.BookDto;
-import com.bookretail.enums.EClientId;
+import com.bookretail.dto.book.BookUpdateDto;
 import com.bookretail.enums.ERole;
-import com.bookretail.factory.BookFactory;
 import com.bookretail.factory.BookTestFactory;
 import com.bookretail.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,8 +32,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,13 +46,7 @@ public class BookControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private EClientId eClientId;
-
-    @Autowired
     private WebApplicationContext context;
-
-    @Autowired
-    private BookFactory bookFactory;
 
     private MockMvc mockMvc;
 
@@ -81,7 +73,6 @@ public class BookControllerTest {
         @WithMockUser("spring")
         void GetAllBooks_Returns200() throws Exception {
             //given
-            //when
             Page<BookDto> rentalPage = new PageImpl<>(new ArrayList<>());
 
             //when
@@ -92,6 +83,17 @@ public class BookControllerTest {
             //then
             actions.andExpect(status().isOk());
             verify(bookService).getAllBooks(any());
+        }
+
+        @Test
+        void GetAllBooks_Returns403() throws Exception {
+            //given
+            //when
+            ResultActions actions = mockMvc.perform(
+                    get("/book")).andDo(print());
+
+            //then
+            actions.andExpect(status().is(403));
         }
 
         @Test
@@ -123,16 +125,40 @@ public class BookControllerTest {
             //given
             var body = BookTestFactory.createBookCreateDto();
 
+            //when
+
             ResultActions actions = mockMvc.perform(
                             post("/book")
                                     .contentType(CONTENT_TYPE)
                                     .content(objectMapper.writeValueAsString(body)))
                     .andDo(print());
 
-            //theen
+            //then
             actions.andExpect(status().is(403));
 
         }
+
+        @Test
+        void CreateABook_Returns401() throws Exception {
+
+            //given
+            var body = BookTestFactory.createBookCreateDto();
+
+            //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+
+            ResultActions actions = mockMvc.perform(
+                            post("/book")
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+            //then
+            actions.andExpect(status().is(401));
+
+        }
+
 
         @Test
         @WithMockUser(authorities = {ERole.SYSADMIN})
@@ -168,8 +194,12 @@ public class BookControllerTest {
         void CreateABook_Returns400_BlankNull() throws Exception {
 
             //given
-            var body = BookTestFactory.createBookCreateDtoBlankNull();
+            var body = BookTestFactory.createBookCreateDto();
+            body.setTitle("");
+            body.setStock(null);
+            body.setPrice(null);
 
+            //when
             ResultActions actions = mockMvc.perform(
                             post("/book")
                                     .contentType(CONTENT_TYPE)
@@ -191,7 +221,11 @@ public class BookControllerTest {
         void CreateABook_Returns400_NotPositive() throws Exception {
             //Successful post test
             //given
-            var body = BookTestFactory.createBookCreateDtoNotPositive();
+            var body = BookTestFactory.createBookCreateDto();
+            body.setStock(-1 * body.getStock());
+            body.setPrice(-1 * body.getPrice());
+
+            //when
 
             ResultActions actions = mockMvc.perform(
                             post("/book")
@@ -205,6 +239,142 @@ public class BookControllerTest {
             actions.andExpect(mvcResult ->
                     Assertions.assertThat(mvcResult.getResponse().getContentAsString()).contains("validation.generic.number.positive"));
             actions.andExpect(status().is(400));
+
+        }
+    }
+
+    @Nested
+    class UpdateABook_Endpoint_Test_Cases {
+
+        @Test
+        @WithMockUser(authorities = {ERole.SYSADMIN})
+        void UpdateABook_Returns200() throws Exception {
+            //given
+            var body = BookTestFactory.createBookUpdateDto();
+            var response = Response.ok(BookTestFactory.createBookDto());
+
+            //when
+            when(bookService.updateABook(anyLong(), any(BookUpdateDto.class))).thenReturn(response);
+            var sBuilder = new StringBuilder("/book/");
+            sBuilder.append(response.getData().getId());
+
+            ResultActions actions = mockMvc.perform(
+                            patch(sBuilder.toString())
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+
+            //then
+            ArgumentCaptor<BookUpdateDto> captor = ArgumentCaptor.forClass(BookUpdateDto.class);
+            verify(bookService).updateABook(anyLong(), captor.capture());
+            assertThat(captor.getValue().getAuthor()).isEqualTo(body.getAuthor());
+            assertThat(captor.getValue().getIsbn()).isEqualTo(body.getIsbn());
+            assertThat(captor.getValue().getPrice()).isEqualTo(body.getPrice());
+            assertThat(captor.getValue().getStock()).isEqualTo(body.getStock());
+            assertThat(captor.getValue().getTitle()).isEqualTo(body.getTitle());
+            actions.andExpect(status().isOk());
+
+        }
+
+        @Test
+        @WithMockUser(authorities = {ERole.USER})
+        void UpdateABook_Returns403_USER() throws Exception {
+            //given
+            var body = BookTestFactory.createBookUpdateDto();
+            var response = Response.ok(BookTestFactory.createBookDto());
+
+            //when
+            var sBuilder = new StringBuilder("/book/");
+            sBuilder.append(response.getData().getId());
+
+            ResultActions actions = mockMvc.perform(
+                            patch(sBuilder.toString())
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+
+            //then
+            verify(bookService, times(0)).updateABook(anyLong(), any());
+            actions.andExpect(status().is(403));
+
+        }
+
+        @Test
+        void UpdateABook_Returns403() throws Exception {
+            //given
+            var body = BookTestFactory.createBookUpdateDto();
+            var response = Response.ok(BookTestFactory.createBookDto());
+
+            //when
+            var sBuilder = new StringBuilder("/book/");
+            sBuilder.append(response.getData().getId());
+
+            ResultActions actions = mockMvc.perform(
+                            patch(sBuilder.toString())
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+
+            //then
+            verify(bookService, times(0)).updateABook(anyLong(), any());
+            actions.andExpect(status().is(403));
+
+        }
+
+        @Test
+        @WithMockUser(authorities = {ERole.SYSADMIN})
+        void UpdateABook_Returns200_NotPositive() throws Exception {
+            //given
+            var body = BookTestFactory.createBookUpdateDto();
+            body.setStock(-1 * body.getStock());
+            body.setPrice(-1 * body.getPrice());
+
+            var response = Response.ok(BookTestFactory.createBookDto());
+            var sBuilder = new StringBuilder("/book/");
+            sBuilder.append(response.getData().getId());
+            //when
+            when(bookService.updateABook(anyLong(), any(BookUpdateDto.class))).thenReturn(response);
+
+            ResultActions actions = mockMvc.perform(
+                            patch(sBuilder.toString())
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+
+            //then
+            ArgumentCaptor<BookUpdateDto> captor = ArgumentCaptor.forClass(BookUpdateDto.class);
+            verify(bookService, times(1)).updateABook(anyLong(), captor.capture());
+            assertThat(captor.getValue().getAuthor()).isEqualTo(body.getAuthor());
+            assertThat(captor.getValue().getIsbn()).isEqualTo(body.getIsbn());
+            assertThat(captor.getValue().getPrice()).isNotEqualTo(response.getData().getPrice());
+            assertThat(captor.getValue().getStock()).isNotEqualTo(response.getData().getStock());
+            assertThat(captor.getValue().getTitle()).isEqualTo(body.getTitle());
+            actions.andExpect(status().isOk());
+
+        }
+
+        @Test
+        @WithMockUser(authorities = {ERole.SYSADMIN})
+        void UpdateABook_Returns500() throws Exception {
+            //given
+
+            var sBuilder = new StringBuilder("/book/undefined");
+            //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+
+            ResultActions actions = mockMvc.perform(
+                            patch(sBuilder.toString()))
+                    .andDo(print());
+
+
+            //then
+            verify(bookService, times(0)).updateABook(anyLong(), any());
+            actions.andExpect(status().isInternalServerError());
 
         }
     }

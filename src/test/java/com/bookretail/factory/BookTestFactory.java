@@ -2,6 +2,7 @@ package com.bookretail.factory;
 
 import com.bookretail.dto.book.BookCreateDto;
 import com.bookretail.dto.book.BookDto;
+import com.bookretail.dto.book.BookUpdateDto;
 
 public class BookTestFactory {
 
@@ -21,29 +22,16 @@ public class BookTestFactory {
         );
     }
 
-    public static BookCreateDto createBookCreateDtoBlankNull() {
-        return new BookCreateDto(
-                "",
-                "Test Author",
-                "Test Publisher",
-                "Test ISBN",
-                "2022",
-                "Test Description",
-                null,
-                null
-        );
-    }
-
-    public static BookCreateDto createBookCreateDtoNotPositive() {
-        return new BookCreateDto(
+    public static BookUpdateDto createBookUpdateDto() {
+        return new BookUpdateDto(
                 "Test Book",
                 "Test Author",
                 "Test Publisher",
                 "Test ISBN",
                 "2022",
                 "Test Description",
-                -10.0,
-                -10L
+                10.0,
+                10L
         );
     }
 
