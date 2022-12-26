@@ -7,6 +7,8 @@ import com.bookretail.enums.EGrantType;
 import com.bookretail.enums.ERole;
 import com.bookretail.model.User;
 
+import java.util.Date;
+
 
 public class UserTestFactory {
 
@@ -43,6 +45,11 @@ public class UserTestFactory {
 
     public static RegisterRequest createRegisterRequest() {
         return new RegisterRequest("Name", "Surname", "example@hotmail.com", "password", "05555555555");
+    }
+
+    public static ProfileDto createProfileDto(Date resultCreatedAt) {
+        return new ProfileDto(123L, "name", "surname", "me@example.com", "5073681699",
+                resultCreatedAt, "https://example.com/abc.jpg", "USER");
     }
 
     public static ProfileDto createProfileDto(User user) {
