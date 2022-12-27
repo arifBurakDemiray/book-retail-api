@@ -36,7 +36,7 @@ public class OrderController {
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     @OrderFilterParams
-    public ResponseEntity<Response<Page<OrderDto>>> getAllOrdersForCustomer(
+    public ResponseEntity<Response<Page<OrderDto>>> getAllOrders(
             PageFilter pageFilter,
             @Parameter(hidden = true) OrderFilterSpec spec,
             @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false) String token) {
