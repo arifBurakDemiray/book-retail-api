@@ -284,7 +284,7 @@ public class BookControllerTest {
 
         @Test
         @WithMockUser(authorities = {ERole.USER})
-        void UpdateABook_Returns403_USER() throws Exception {
+        void UpdateABook_Returns401_USER() throws Exception {
             //given
             var body = BookTestFactory.createBookUpdateDto();
             var response = Response.ok(BookTestFactory.createBookDto());
@@ -304,7 +304,7 @@ public class BookControllerTest {
 
             //then
             verify(bookService, times(0)).updateABook(anyLong(), any());
-            actions.andExpect(status().is(403));
+            actions.andExpect(status().is(401));
 
         }
 
