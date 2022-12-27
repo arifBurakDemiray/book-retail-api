@@ -134,14 +134,16 @@ public class OrderControllerTest {
         }
 
         @Test
-        void GetAllOrders_Returns403() throws Exception {
+        void GetAllOrders_Returns401() throws Exception {
             //given
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
             //when
             ResultActions actions = mockMvc.perform(
                     get("/order")).andDo(print());
 
             //then
-            actions.andExpect(status().is(403));
+            actions.andExpect(status().is(401));
         }
 
         @Test
@@ -262,12 +264,13 @@ public class OrderControllerTest {
     class CreateOrder_Endpoint_Test_Cases {
         @Test
         @WithMockUser(value = "spring", authorities = {ERole.SYSADMIN})
-        void CreateOrder_Returns403_SYSADMIN() throws Exception {
+        void CreateOrder_Returns401_SYSADMIN() throws Exception {
 
             //given
             var body = OrderTestFactory.createOrderCreateDto();
             //when
-
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
             ResultActions actions = mockMvc.perform(
                             post("/order")
                                     .contentType(CONTENT_TYPE)
@@ -275,7 +278,7 @@ public class OrderControllerTest {
                     .andDo(print());
 
             //then
-            actions.andExpect(status().is(403));
+            actions.andExpect(status().is(401));
 
         }
 

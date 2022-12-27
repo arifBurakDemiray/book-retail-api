@@ -86,14 +86,16 @@ public class BookControllerTest {
         }
 
         @Test
-        void GetAllBooks_Returns403() throws Exception {
+        void GetAllBooks_Returns401() throws Exception {
             //given
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
             //when
             ResultActions actions = mockMvc.perform(
                     get("/book")).andDo(print());
 
             //then
-            actions.andExpect(status().is(403));
+            actions.andExpect(status().is(401));
         }
 
         @Test
@@ -120,13 +122,16 @@ public class BookControllerTest {
 
         @Test
         @WithMockUser("spring")
-        void CreateABook_Returns403_USER() throws Exception {
+        void CreateABook_Returns401_USER() throws Exception {
 
             //given
             var body = BookTestFactory.createBookCreateDto();
 
             //when
-
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
             ResultActions actions = mockMvc.perform(
                             post("/book")
                                     .contentType(CONTENT_TYPE)
@@ -134,7 +139,7 @@ public class BookControllerTest {
                     .andDo(print());
 
             //then
-            actions.andExpect(status().is(403));
+            actions.andExpect(status().is(401));
 
         }
 
@@ -286,6 +291,8 @@ public class BookControllerTest {
 
             //when
             var sBuilder = new StringBuilder("/book/");
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
             sBuilder.append(response.getData().getId());
 
             ResultActions actions = mockMvc.perform(
@@ -302,11 +309,12 @@ public class BookControllerTest {
         }
 
         @Test
-        void UpdateABook_Returns403() throws Exception {
+        void UpdateABook_Returns401() throws Exception {
             //given
             var body = BookTestFactory.createBookUpdateDto();
             var response = Response.ok(BookTestFactory.createBookDto());
-
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
             //when
             var sBuilder = new StringBuilder("/book/");
             sBuilder.append(response.getData().getId());
@@ -320,7 +328,7 @@ public class BookControllerTest {
 
             //then
             verify(bookService, times(0)).updateABook(anyLong(), any());
-            actions.andExpect(status().is(403));
+            actions.andExpect(status().is(401));
 
         }
 

@@ -133,6 +133,12 @@ Steps:
 
 ### Notes
 
+- To activate your account please use postman for now. Because, activation process lacks frontend
+  - Simply copy your activation code from email you got (from activate button)
+
+<hr />
+
+
 - To be able to add a trigger to a database in Amazon RDS, (for this operation you need to have privilege to create a
   database and create a parameter group):
 

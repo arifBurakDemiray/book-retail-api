@@ -34,11 +34,11 @@ public class MonthlyStatisticService {
 
         criteriaQuery.multiselect(
                 monthPath,
-                queryBuilder.sum(root.get(Order_.id)),
-                queryBuilder.sum(queryBuilder.<Number>selectCase().when(
-                        root.get(Order_.status).in(EOrderStatus.DELIVERED), root.get(Order_.quantity)).otherwise(0L)),
+                queryBuilder.countDistinct(root.get(Order_.id)),
                 queryBuilder.sum(queryBuilder.<Number>selectCase().when(
                         root.get(Order_.status).in(EOrderStatus.DELIVERED), root.get(Order_.cost)).otherwise(0.0)),
+                queryBuilder.sum(queryBuilder.<Number>selectCase().when(
+                        root.get(Order_.status).in(EOrderStatus.DELIVERED), root.get(Order_.quantity)).otherwise(0L)),
                 queryBuilder.sum(queryBuilder.<Number>selectCase().when(
                         root.get(Order_.status).in(EOrderStatus.DELIVERED), 1L).otherwise(0L))
         );

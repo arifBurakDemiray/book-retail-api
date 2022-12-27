@@ -1,6 +1,7 @@
 package com.bookretail.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public enum EErrorCode {
+public enum EErrorCode implements EStatusCode {
     UNHANDLED("500"),
     NOT_FOUND("404"),
     UNAUTHORIZED("401"),
@@ -37,6 +38,20 @@ public enum EErrorCode {
         return EErrorCode.valueOf(code.toUpperCase(Locale.ENGLISH));
     }
 
+    @JsonValue
+    @Override
+    public String getStatusCode() {
+        return code;
+    }
+
+    @NotNull
+    @Contract(pure = true)
+    @Override
+    public String getStatusName() {
+        return name();
+    }
+
+    @Override
     public int httpStatusCode() {
         return Integer.parseUnsignedInt(code);
     }

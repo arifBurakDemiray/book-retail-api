@@ -51,7 +51,7 @@ public class OrderValidator {
             return ValidationResult.failed(messageSource.getMessage("validation.order.book.stock.not_enough"));
         }
 
-        if (user.getMoney() < book.getBookDetail().getPrice() * body.getQuantity()) {
+        if (user.getMoney() == null || user.getMoney() < book.getBookDetail().getPrice() * body.getQuantity()) {
             return ValidationResult.failed(messageSource.getMessage("validation.order.user.money.not_enough"));
         }
 

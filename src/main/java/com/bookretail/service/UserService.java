@@ -102,7 +102,7 @@ public class UserService {
         }
 
         var user = userRepository.getById(jwtTokenUtil.getUserId(token));
-        user.setMoney(amount + user.getMoney());
+        user.setMoney(amount + (user.getMoney() == null ? 0 : user.getMoney()));
         userRepository.save(user);
 
 

@@ -73,14 +73,16 @@ public class StatisticControllerTest {
         }
 
         @Test
-        void GetMonthlyStatistics_Returns403() throws Exception {
+        void GetMonthlyStatistics_Returns401() throws Exception {
             //given
             //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
             ResultActions actions = mockMvc.perform(
                     get("/statistic")).andDo(print());
 
             //then
-            actions.andExpect(status().is(403));
+            actions.andExpect(status().is(401));
         }
 
         @Test
