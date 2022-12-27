@@ -1,6 +1,7 @@
 package com.bookretail.controller;
 
 import com.bookretail.dto.Response;
+import com.bookretail.dto.order.OrderCreateDto;
 import com.bookretail.dto.order.OrderDto;
 import com.bookretail.enums.EDetail;
 import com.bookretail.enums.EErrorCode;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,11 +29,13 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -249,6 +253,130 @@ public class OrderControllerTest {
             //then
             verify(orderService, times(0)).getById(anyLong(), anyString());
             actions.andExpect(status().is(500));
+
+        }
+    }
+
+    @Nested
+    class CreateOrder_Endpoint_Test_Cases {
+        @Test
+        @WithMockUser(value = "spring", authorities = {ERole.SYSADMIN})
+        void CreateOrder_Returns403_SYSADMIN() throws Exception {
+
+            //given
+            var body = OrderTestFactory.createOrderCreateDto();
+            //when
+
+            ResultActions actions = mockMvc.perform(
+                            post("/order")
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+            //then
+            actions.andExpect(status().is(403));
+
+        }
+
+        @Test
+        void CreateOrder_Returns401() throws Exception {
+
+            //given
+            var body = OrderTestFactory.createOrderCreateDto();
+
+            //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+
+            ResultActions actions = mockMvc.perform(
+                            post("/order")
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+            //then
+            actions.andExpect(status().is(401));
+
+        }
+
+
+        @Test
+        @WithMockUser(authorities = {ERole.USER})
+        void CreateOrder_Returns200() throws Exception {
+
+            //given
+            var body = OrderTestFactory.createOrderCreateDto();
+            var response = Response.ok(OrderTestFactory.createOrderDto(EDetail.MORE));
+
+            //when
+            when(orderService.createOrder(any(), any(OrderCreateDto.class))).thenReturn(response);
+
+            ResultActions actions = mockMvc.perform(
+                            post("/order")
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+
+            //then
+            ArgumentCaptor<OrderCreateDto> captor = ArgumentCaptor.forClass(OrderCreateDto.class);
+            verify(orderService).createOrder(any(), captor.capture());
+            assertThat(captor.getValue().getBookId()).isEqualTo(body.getBookId());
+            assertThat(captor.getValue().getQuantity()).isEqualTo(body.getQuantity());
+            actions.andExpect(jsonPath("$.data.user").hasJsonPath());
+            actions.andExpect(status().isOk());
+
+        }
+
+        @Test
+        @WithMockUser(authorities = {ERole.USER})
+        void CreateOrder_Returns400_Null() throws Exception {
+
+            //given
+            var body = OrderTestFactory.createOrderCreateDto();
+            body.setBookId(null);
+            body.setQuantity(null);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                            post("/order")
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+
+            //then
+            verify(orderService, times(0)).createOrder(any(), any(OrderCreateDto.class));
+
+            actions.andExpect(mvcResult ->
+                    assertThat(mvcResult.getResponse().getContentAsString()).contains("validation.generic.entity.not_null"));
+            actions.andExpect(status().is(400));
+
+        }
+
+        @Test
+        @WithMockUser(authorities = {ERole.USER})
+        void CreateOrder_Returns400_NotPositive() throws Exception {
+            //Successful post test
+            //given
+            var body = OrderTestFactory.createOrderCreateDto();
+            body.setBookId(-1L);
+            body.setQuantity(-1L);
+
+            //when
+
+            ResultActions actions = mockMvc.perform(
+                            post("/order")
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+
+            verify(orderService, times(0)).createOrder(any(), any(OrderCreateDto.class));
+
+            actions.andExpect(mvcResult ->
+                    assertThat(mvcResult.getResponse().getContentAsString()).contains("validation.generic.number.positive"));
+            actions.andExpect(status().is(400));
 
         }
     }

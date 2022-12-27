@@ -1,6 +1,7 @@
 package com.bookretail.factory;
 
 import com.bookretail.dto.book.BookDto;
+import com.bookretail.dto.order.OrderCreateDto;
 import com.bookretail.dto.order.OrderDto;
 import com.bookretail.enums.EDetail;
 
@@ -23,4 +24,11 @@ public class OrderTestFactory {
         );
     }
 
+    public static OrderCreateDto createOrderCreateDto() {
+        return new OrderCreateDto(
+                1L,
+                1L
+        );
+    }
+    
 }
