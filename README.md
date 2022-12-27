@@ -16,7 +16,7 @@ Also, includes nodejs to build custom email templates with mjml
   - API Documentation:
 - Development:
   - API Documentation Postman [Postman Collection](https://www.postman.com/arifburakdemiray/workspace/book-retail-api)
-  - API Documentation Swagger [Swagger UI Local](http://localhost:5000/documentation/index.html)
+  - API Documentation Swagger [Swagger UI Local (Has swagger auth)](http://localhost:5000/documentation/index.html)
 <hr />
 
 ## Branches
