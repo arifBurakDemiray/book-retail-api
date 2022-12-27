@@ -3,6 +3,7 @@ package com.bookretail.service;
 
 import com.bookretail.config.security.JwtUtil;
 import com.bookretail.dto.PageFilter;
+import com.bookretail.dto.ServiceResponse;
 import com.bookretail.dto.order.OrderCreateDto;
 import com.bookretail.dto.order.OrderUpdateDto;
 import com.bookretail.enums.EDetail;
@@ -280,13 +281,16 @@ public class OrderServiceTest {
             var order = OrderTestFactory.createOrder(book, user);
             var result = OrderTestFactory.createOrderDto(EDetail.MORE);
             var validation = mock(ValidationResult.class);
+            var validation2 = mock(ValidationResult.class);
             //when
             when(jwtUtil.getUserId(any())).thenReturn(user.getId());
             when(jwtUtil.getUserRole(any())).thenReturn(ERole.stringValueOf(user.getRole()));
             when(userRepository.getById(any())).thenReturn(user);
             when(orderValidator.validate(any(Long.class), any(String.class), any(Long.class))).thenReturn(validation);
-            when(validation.isNotValid()).thenReturn(true);
-            when(validation.getMessage()).thenReturn("Message");
+            when(validation.isNotValid()).thenReturn(false);
+            when(orderValidator.validate(any(OrderUpdateDto.class), any(), any())).thenReturn(validation2);
+            when(validation2.isNotValid()).thenReturn(true);
+            when(validation2.getMessage()).thenReturn("Message");
             when(messageSource.getMessage((String) any())).thenReturn("Message");
 
             var response = orderService.updateOrder(1L, token, new OrderUpdateDto(EOrderStatus.APPROVED));
@@ -314,10 +318,73 @@ public class OrderServiceTest {
             when(orderRepository.findById(any())).thenReturn(Optional.empty());
             when(messageSource.getMessage((String) any())).thenReturn("Message");
 
-            var response = orderService.getById(1L, token);
+            var response = orderService.updateOrder(1L, token, new OrderUpdateDto(EOrderStatus.APPROVED));
 
             //then
             assertFalse(response.isOk());
+
+        }
+
+        @Test
+        void UpdateOrder_Success() throws AuthenticationException {
+            //given
+            var user = UserTestFactory.createSuccessTestUser_SYSADMIN();
+            var token = UserTestFactory.token_USER;
+            var book = BookTestFactory.createBook();
+            var order = OrderTestFactory.createOrder(book, user);
+            var result = OrderTestFactory.createOrderDto(EDetail.MORE);
+            var validation = mock(ValidationResult.class);
+            var validation2 = mock(ValidationResult.class);
+            var serviceRsp = mock(ServiceResponse.class);
+            //when
+            when(jwtUtil.getUserId(any())).thenReturn(user.getId());
+            when(jwtUtil.getUserRole(any())).thenReturn(ERole.stringValueOf(user.getRole()));
+            when(userRepository.getById(any())).thenReturn(user);
+            when(orderValidator.validate(any(Long.class), any(String.class), any(Long.class))).thenReturn(validation);
+            when(validation.isNotValid()).thenReturn(false);
+            when(orderRepository.findById(any())).thenReturn(Optional.of(order));
+            when(orderValidator.validate(any(OrderUpdateDto.class), any(), any())).thenReturn(validation2);
+            when(validation2.isNotValid()).thenReturn(false);
+            when(orderRepository.save(any())).thenReturn(order);
+            when(orderFactory.createOrderDto(any(), any())).thenReturn(result);
+
+            var response = orderService.updateOrder(1L, token, new OrderUpdateDto(EOrderStatus.APPROVED));
+
+            //then
+            assertTrue(response.isOk());
+
+        }
+
+        @Test
+        void UpdateOrder_Success_Canceled() throws AuthenticationException {
+            //given
+            var user = UserTestFactory.createSuccessTestUser_SYSADMIN();
+            user.setMoney(1000.0);
+            var token = UserTestFactory.token_USER;
+            var book = BookTestFactory.createBook();
+            book.setBookDetail(BookTestFactory.createBookDetail(book));
+            var order = OrderTestFactory.createOrder(book, user);
+            var result = OrderTestFactory.createOrderDto(EDetail.MORE);
+            var validation = mock(ValidationResult.class);
+            var validation2 = mock(ValidationResult.class);
+            var serviceRsp = mock(ServiceResponse.class);
+            //when
+            when(jwtUtil.getUserId(any())).thenReturn(user.getId());
+            when(jwtUtil.getUserRole(any())).thenReturn(ERole.stringValueOf(user.getRole()));
+            when(userRepository.getById(any())).thenReturn(user);
+            when(orderValidator.validate(any(Long.class), any(String.class), any(Long.class))).thenReturn(validation);
+            when(validation.isNotValid()).thenReturn(false);
+            when(orderRepository.findById(any())).thenReturn(Optional.of(order));
+            when(orderValidator.validate(any(OrderUpdateDto.class), any(), any())).thenReturn(validation2);
+            when(validation2.isNotValid()).thenReturn(false);
+            when(bookRepository.save(any())).thenReturn(book);
+            when(orderRepository.save(any())).thenReturn(order);
+            when(orderFactory.createOrderDto(any(), any())).thenReturn(result);
+
+            var response = orderService.updateOrder(1L, token, new OrderUpdateDto(EOrderStatus.CANCELLED));
+
+            //then
+            assertTrue(response.isOk());
 
         }
     }
