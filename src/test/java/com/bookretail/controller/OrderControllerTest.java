@@ -3,8 +3,10 @@ package com.bookretail.controller;
 import com.bookretail.dto.Response;
 import com.bookretail.dto.order.OrderCreateDto;
 import com.bookretail.dto.order.OrderDto;
+import com.bookretail.dto.order.OrderUpdateDto;
 import com.bookretail.enums.EDetail;
 import com.bookretail.enums.EErrorCode;
+import com.bookretail.enums.EOrderStatus;
 import com.bookretail.enums.ERole;
 import com.bookretail.factory.OrderTestFactory;
 import com.bookretail.service.OrderService;
@@ -34,8 +36,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -376,6 +377,228 @@ public class OrderControllerTest {
 
             actions.andExpect(mvcResult ->
                     assertThat(mvcResult.getResponse().getContentAsString()).contains("validation.generic.number.positive"));
+            actions.andExpect(status().is(400));
+
+        }
+    }
+
+    @Nested
+    class UpdateOrder_Endpoint_Test_Cases {
+        @Test
+        @WithMockUser(username = "spring", authorities = {ERole.SYSADMIN})
+        void UpdateOrder_Returns404() throws Exception {
+            //given
+            var result = OrderTestFactory.createOrderDto(EDetail.MORE);
+            var body = new OrderUpdateDto(EOrderStatus.APPROVED);
+
+            var sBuilder = new StringBuilder("/order/");
+            sBuilder.append(result.getId());
+            Response<OrderDto> response = Response.notOk("Message", EErrorCode.NOT_FOUND);
+
+            //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+            when(orderService.updateOrder(any(), any(), any(OrderUpdateDto.class))).thenReturn(response);
+
+            //when
+
+            ResultActions actions = mockMvc.perform(patch(sBuilder.toString())
+                    .contentType(CONTENT_TYPE)
+                    .content(objectMapper.writeValueAsString(body)));
+
+
+            //then
+            verify(orderService, times(1)).updateOrder(any(), any(), any(OrderUpdateDto.class));
+            actions.andExpect(status().is(404));
+
+        }
+
+        @Test
+        @WithMockUser(username = "spring", authorities = {ERole.USER})
+        void UpdateOrder_Returns400_Approved_USER() throws Exception {
+            //given
+            var result = OrderTestFactory.createOrderDto(EDetail.MORE);
+            var body = new OrderUpdateDto(EOrderStatus.APPROVED);
+
+            var sBuilder = new StringBuilder("/order/");
+            sBuilder.append(result.getId());
+            Response<OrderDto> response = Response.notOk("Message", EErrorCode.BAD_REQUEST);
+
+            //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+            when(orderService.updateOrder(any(), any(), any(OrderUpdateDto.class))).thenReturn(response);
+
+            //when
+
+            ResultActions actions = mockMvc.perform(patch(sBuilder.toString())
+                    .contentType(CONTENT_TYPE)
+                    .content(objectMapper.writeValueAsString(body)));
+
+
+            //then
+            verify(orderService, times(1)).updateOrder(any(), any(), any(OrderUpdateDto.class));
+            actions.andExpect(status().is(400));
+
+        }
+
+        @Test
+        @WithMockUser(username = "spring", authorities = {ERole.USER})
+        void UpdateOrder_Returns400_Delivered_USER() throws Exception {
+            //given
+            var result = OrderTestFactory.createOrderDto(EDetail.MORE);
+            var body = new OrderUpdateDto(EOrderStatus.DELIVERED);
+
+            var sBuilder = new StringBuilder("/order/");
+            sBuilder.append(result.getId());
+            Response<OrderDto> response = Response.notOk("Message", EErrorCode.BAD_REQUEST);
+
+            //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+            when(orderService.updateOrder(any(), any(), any(OrderUpdateDto.class))).thenReturn(response);
+
+            //when
+
+            ResultActions actions = mockMvc.perform(patch(sBuilder.toString())
+                    .contentType(CONTENT_TYPE)
+                    .content(objectMapper.writeValueAsString(body)));
+
+
+            //then
+            verify(orderService, times(1)).updateOrder(any(), any(), any(OrderUpdateDto.class));
+            actions.andExpect(status().is(400));
+
+        }
+
+        @Test
+        @WithMockUser(username = "spring")
+        void UpdateOrder_Returns400_Pending() throws Exception {
+            //given
+            var result = OrderTestFactory.createOrderDto(EDetail.MORE);
+            var body = new OrderUpdateDto(EOrderStatus.PENDING);
+
+            var sBuilder = new StringBuilder("/order/");
+            sBuilder.append(result.getId());
+            Response<OrderDto> response = Response.notOk("Message", EErrorCode.BAD_REQUEST);
+
+            //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+            when(orderService.updateOrder(any(), any(), any(OrderUpdateDto.class))).thenReturn(response);
+
+            //when
+
+            ResultActions actions = mockMvc.perform(patch(sBuilder.toString())
+                    .contentType(CONTENT_TYPE)
+                    .content(objectMapper.writeValueAsString(body)));
+
+
+            //then
+            verify(orderService, times(1)).updateOrder(any(), any(), any(OrderUpdateDto.class));
+            actions.andExpect(status().is(400));
+
+        }
+
+        @Test
+        @WithMockUser(username = "spring", authorities = {ERole.USER})
+        void UpdateOrder_Returns200() throws Exception {
+            //given
+            var result = OrderTestFactory.createOrderDto(EDetail.MORE);
+            var body = new OrderUpdateDto(EOrderStatus.CANCELLED);
+
+            var sBuilder = new StringBuilder("/order/");
+            sBuilder.append(result.getId());
+            Response<OrderDto> response = Response.ok(result);
+
+            //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+            when(orderService.updateOrder(any(), any(), any(OrderUpdateDto.class))).thenReturn(response);
+
+            //when
+
+            ResultActions actions = mockMvc.perform(patch(sBuilder.toString())
+                    .contentType(CONTENT_TYPE)
+                    .content(objectMapper.writeValueAsString(body)));
+
+
+            //then
+            verify(orderService, times(1)).updateOrder(any(), any(), any(OrderUpdateDto.class));
+            actions.andExpect(jsonPath("$.data.status").value(body.getStatus().toString()))
+                    .andExpect(status().is(200));
+
+        }
+
+        @Test
+        void UpdateOrder_Returns401() throws Exception {
+            //given
+            var result = OrderTestFactory.createOrderDto(EDetail.MORE);
+            var body = new OrderUpdateDto(EOrderStatus.APPROVED);
+
+            var sBuilder = new StringBuilder("/order/");
+            sBuilder.append(result.getId());
+
+            //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+            //when
+
+            ResultActions actions = mockMvc.perform(patch(sBuilder.toString())
+                    .contentType(CONTENT_TYPE)
+                    .content(objectMapper.writeValueAsString(body)));
+
+
+            //then
+            verify(orderService, times(0)).updateOrder(any(), any(), any(OrderUpdateDto.class));
+            actions.andExpect(status().is(401));
+
+        }
+
+        @Test
+        @WithMockUser(authorities = {ERole.SYSADMIN})
+        void UpdateOrder_Returns500() throws Exception {
+            //given
+
+            var sBuilder = new StringBuilder("/order/undefined");
+            //when
+            when(messageSource.getMessage(any(), any(), any()))
+                    .thenReturn("Message");
+
+            ResultActions actions = mockMvc.perform(
+                            patch(sBuilder.toString()))
+                    .andDo(print());
+
+
+            //then
+            verify(orderService, times(0)).updateOrder(any(), any(), any(OrderUpdateDto.class));
+            actions.andExpect(status().isInternalServerError());
+
+        }
+
+        @Test
+        @WithMockUser(authorities = {ERole.USER})
+        void CreateOrder_Returns400_Null() throws Exception {
+
+            //given
+            var result = OrderTestFactory.createOrderDto(EDetail.MORE);
+            var body = new OrderUpdateDto(null);
+
+            var sBuilder = new StringBuilder("/order/");
+            sBuilder.append(result.getId());
+            //when
+            ResultActions actions = mockMvc.perform(
+                            patch(sBuilder.toString())
+                                    .contentType(CONTENT_TYPE)
+                                    .content(objectMapper.writeValueAsString(body)))
+                    .andDo(print());
+
+
+            //then
+            verify(orderService, times(0)).updateOrder(any(), any(), any(OrderUpdateDto.class));
+
+            actions.andExpect(mvcResult ->
+                    assertThat(mvcResult.getResponse().getContentAsString()).contains("validation.generic.entity.not_null"));
             actions.andExpect(status().is(400));
 
         }

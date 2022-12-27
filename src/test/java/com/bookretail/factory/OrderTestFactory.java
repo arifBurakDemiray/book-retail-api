@@ -4,6 +4,7 @@ import com.bookretail.dto.book.BookDto;
 import com.bookretail.dto.order.OrderCreateDto;
 import com.bookretail.dto.order.OrderDto;
 import com.bookretail.enums.EDetail;
+import com.bookretail.enums.EOrderStatus;
 
 public class OrderTestFactory {
 
@@ -17,6 +18,7 @@ public class OrderTestFactory {
                 1.0,
                 1L,
                 2L,
+                EOrderStatus.CANCELLED,
                 null,
                 null,
                 detail.equals(EDetail.MORE) ? UserTestFactory.createRegisterDto() : null,
@@ -30,5 +32,5 @@ public class OrderTestFactory {
                 1L
         );
     }
-    
+
 }

@@ -35,6 +35,7 @@ public class OrderFactory {
                 order.getCost(),
                 order.getBook().getId(),
                 order.getUser().getId(),
+                order.getStatus(),
                 order.getCreatedAt(),
                 order.getUpdatedAt(),
                 EDetail.isMore(detail) ? createUserDto(order.getUser()) : null,

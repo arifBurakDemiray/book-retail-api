@@ -2,6 +2,7 @@ package com.bookretail.dto.order;
 
 import com.bookretail.dto.auth.RegisterDto;
 import com.bookretail.dto.book.BookDto;
+import com.bookretail.enums.EOrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,8 @@ public class OrderDto {
     private Long bookId;
 
     private Long userId;
+
+    private EOrderStatus status;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date createdAt;
