@@ -19,6 +19,8 @@ import com.bookretail.repository.OrderRepository;
 import com.bookretail.repository.UserRepository;
 import com.bookretail.util.SpecUtil;
 import com.bookretail.validator.OrderValidator;
+import com.bookretail.validator.coc.BookValidator;
+import com.bookretail.validator.coc.UserBookValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
@@ -90,11 +92,10 @@ public class OrderService {
     @Transactional
     public Response<OrderDto> createOrder(String token, OrderCreateDto body) {
         var user = userRepository.getById(jwtUtil.getUserId(token));
-        var validation = orderValidator.validate(body, user);
+        var maybeBook = bookRepository.findById(body.getBookId());
 
-        if (validation.isNotValid()) {
-            return Response.notOk(validation.getMessage(), EErrorCode.BAD_REQUEST);
-        }
+        var coc = new BookValidator(new UserBookValidator(messageSource, user, maybeBook, body), messageSource, maybeBook);
+        coc.validate();
 
         var book = bookRepository.getById(body.getBookId());
         book.getBookDetail().setStock(book.getBookDetail().getStock() - body.getQuantity());

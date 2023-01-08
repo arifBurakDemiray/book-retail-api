@@ -1,5 +1,9 @@
 package com.bookretail.config;
 
+import com.bookretail.dto.Response;
+import com.bookretail.enums.EErrorCode;
+import com.bookretail.util.StringUtil;
+import com.bookretail.util.exception.ValidationCocException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +22,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import com.bookretail.dto.Response;
-import com.bookretail.enums.EErrorCode;
-import com.bookretail.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -61,6 +62,12 @@ public class ExceptionAdvice {
 
         var message = messageSource.getMessage("exception.advice.forbidden");
         return Response.notOk(message, EErrorCode.ACCESS_DENIED).toResponseEntity();
+    }
+
+    @ExceptionHandler({ValidationCocException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response<?> validationCocException(@NotNull Exception exception) {
+        return Response.notOk(exception.getMessage(), EErrorCode.BAD_REQUEST);
     }
 
     @ExceptionHandler({HttpMediaTypeException.class})
